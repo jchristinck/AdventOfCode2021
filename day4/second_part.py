@@ -32,7 +32,7 @@ def set_new_number(boards, chosen_numbers, number_drawn):
     return chosen_numbers
 
 
-def check_for_winner(boards, board_size=5):
+def mark_finished_boards(boards, winner_boards, board_size=5):
     for idx in range(len(boards)):
         col_chosen = [0 for i in range(board_size)]
         for idy in range(board_size):
@@ -41,12 +41,12 @@ def check_for_winner(boards, board_size=5):
                 if boards[idx][idy][idz] == 1:
                     col_chosen[idz] += 1
                     row_chosen += 1
-            if row_chosen == board_size:
-                return idx
+            if (row_chosen == board_size) and (winner_boards[idx] == 0):
+                winner_boards[idx] = max(winner_boards) + 1
         for idy in range(board_size):
-            if col_chosen[idy] == board_size:
-                return idx
-    return -1
+            if (col_chosen[idy] == board_size) and (winner_boards[idx] == 0):
+                winner_boards[idx] = max(winner_boards) + 1
+    return winner_boards
 
 
 def calc_sum_of_unmarked(array, chosen_numbers):
@@ -57,16 +57,27 @@ def calc_sum_of_unmarked(array, chosen_numbers):
     return sum
 
 
+def check_for_last_board(winner_boards):
+    if max(winner_boards) == len(winner_boards):
+        for idx in range(len(winner_boards)):
+            if winner_boards[idx] == len(winner_boards):
+                return idx, True
+    return -1, False
+
+
 array = readfile()
 numbers_drawn = list(map(int, array.pop(0)))
 board_array, chosen_numbers_array = prepare_arrays(array)
-winner_board = -1
-while winner_board == -1:
+winner_board_array = [0] * len(board_array)
+one_board_left = False
+while not one_board_left:
     if not numbers_drawn:
         print('failed to determine winner, no numbers left to draw')
-        break
+        quit()
     last_number = numbers_drawn.pop(0)
     chosen_numbers_array = set_new_number(board_array, chosen_numbers_array, last_number)
-    winner_board = check_for_winner(chosen_numbers_array)
+    winner_board_array = mark_finished_boards(chosen_numbers_array, winner_board_array)
+    winner_board, one_board_left = check_for_last_board(winner_board_array)
+    print(winner_board_array)
 sum_of_unmarked = calc_sum_of_unmarked(board_array[winner_board], chosen_numbers_array[winner_board])
 print(last_number, sum_of_unmarked, last_number * sum_of_unmarked)
