@@ -9,7 +9,7 @@ def readfile(filename="input.txt"):
     temp_array = []
     for i in r:
         temp_array.append(list(map(int, i)))  # append row as list of integer
-    return temp_array[0]
+    return temp_array
 
 
 def counting(num_of_days=80):
@@ -27,5 +27,5 @@ def counting(num_of_days=80):
 
 
 if __name__ == "__main__":
-    lantern_array = readfile()
+    lantern_array = readfile()[0]  # only one row
     print(counting(256))
