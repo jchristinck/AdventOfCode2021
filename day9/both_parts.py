@@ -1,5 +1,5 @@
 def readfile(filename="input.txt"):
-    """ reads file and replaces ' | ' with ' ' in each line, than appends line to list of lists"""
+    """ reads file, appends line to list [rows] of lists [elements in row]"""
     with open(filename, "r") as f:
         temp_array = f.read().splitlines()  # list of lines containing a string
     for idx in range(len(temp_array)):
