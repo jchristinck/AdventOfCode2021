@@ -8,7 +8,6 @@ def readfile(filename="input.txt"):
 
 
 if __name__ == "__main__":
-    # array = readfile("test_input.txt")
     array = readfile()
     rows = len(array)
     cols = len(array[0])
@@ -41,7 +40,6 @@ if __name__ == "__main__":
                 lower_n = True
             if left_n and right_n and upper_n and lower_n:
                 winner_array.append((idx, idy))
-    # print(winner_array)
     sum_lowpoints = 0
     for i in range(len(winner_array)):
         sum_lowpoints += int(array[winner_array[i][0]][winner_array[i][1]]) + 1
