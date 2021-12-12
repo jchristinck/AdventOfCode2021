@@ -18,6 +18,7 @@ if __name__ == "__main__":
     fuel_array_fac = []
     for possible_position in position_array:
         fuel_array_lin.append(sum([abs(crab_position - possible_position) for crab_position in array]))
-        fuel_array_fac.append(sum([sum(range(abs(crab_position - possible_position) + 1)) for crab_position in array]))
+        fuel_array_fac.append(sum([(abs(crab_position - possible_position) + 1) *
+                                   abs(crab_position - possible_position) / 2 for crab_position in array]))
     print('linear', min((val, idx) for idx, val in enumerate(fuel_array_lin)))
-    print('factorial', min((val, idx) for idx, val in enumerate(fuel_array_fac)))
+    print('factorial', min((int(val), idx) for idx, val in enumerate(fuel_array_fac)))
