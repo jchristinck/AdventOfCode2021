@@ -1,5 +1,5 @@
 def readfile(filename="input.txt"):
-    """ reads file, appends line to list [rows] of lists [elements in row]"""
+    """ reads file, appends line to list [rows] of lists [elements in row], separately returns folding commands"""
     with open(filename, "r") as f:
         temp_array = list(f.read().splitlines())  # list of lines containing a string
     for row_id in range(len(temp_array)):
