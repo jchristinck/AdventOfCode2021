@@ -1,6 +1,3 @@
-import copy
-
-
 def readfile(filename="input.txt"):
     """ reads file, appends line to list [rows] of lists [elements in row]"""
     with open(filename, "r") as f:
