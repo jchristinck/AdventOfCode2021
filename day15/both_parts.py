@@ -1,4 +1,5 @@
 import timeit as t
+import pygame
 
 
 def readfile(filename="input.txt"):
@@ -28,13 +29,22 @@ def generate_large_maze(f_maze):
     return large_maze
 
 
-def solve_maze():
+def solve_maze(display):
     """ solves maze using a* algorithm """
     queue = [(0, 0, 0)]  # queue for elements to look at
     went = [[0] * len(maze[0]) for _ in range(len(maze))]  # matrix that signals if element is already visited
+    pixel_array = pygame.PixelArray(ui_screen)
+    pixel_array[:][:] = (0, 0, 0)
+    last_weight = 0
     while queue:
         current_node = queue.pop(queue.index(min(queue)))  # set lowest value element in queue as current node
-        went[current_node[1]][current_node[2]] = 1  # mark element as visited
+        if not went[current_node[1]][current_node[2]]:
+            went[current_node[1]][current_node[2]] = 1  # mark element as visited
+            new_val = 0.08 * current_node[0]
+            pixel_array[current_node[1]][current_node[2]] = (new_val, new_val, new_val)
+        if current_node[0] > last_weight and display:
+            last_weight = current_node[0]
+            pygame.display.flip()
         children = []
         if (current_node[1] == len(maze) - 1) and (current_node[2] == len(maze[0]) - 1):  # at finish?
             break
@@ -55,6 +65,12 @@ def solve_maze():
                     # weight must be lower than any value for this element in queue
                     continue
             queue.append((f, child[1], child[2]))  # add element to queue
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                queue = []
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    queue = []
     t2 = t.default_timer()
     print('size of maze:', len(maze), 'x', len(maze[0]))
     print('result:', current_node[0])
@@ -62,8 +78,13 @@ def solve_maze():
 
 
 if __name__ == "__main__":
+    pygame.init()
+    ui_screen = pygame.display.set_mode((500, 500))
+
     t1 = t.default_timer()
     maze = readfile()  # read input.txt
-    solve_maze()  # solve first part
+    solve_maze(False)  # solve first part
     maze = generate_large_maze(maze)  # prepare maze for second part
-    solve_maze()  # solve second part
+    solve_maze(True)  # solve second part
+
+    pygame.quit()
