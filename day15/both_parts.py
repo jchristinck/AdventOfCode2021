@@ -18,11 +18,11 @@ def calc_maze_el(maze_val, repeat_val):
     return maze_val + repeat_val
 
 
-def generate_large_maze(f_maze):
+def generate_large_maze(f_maze, multiplier):
     """ copies maze five times in each dimension to generate the maze for part 2 """
-    large_maze = [[0 for _ in range(5 * len(f_maze))] for _ in range(5 * len(maze[0]))]
-    for i in range(5):  # copy 5 times in y
-        for j in range(5):  # copy 5 times in x
+    large_maze = [[0 for _ in range(multiplier * len(f_maze))] for _ in range(multiplier * len(maze[0]))]
+    for i in range(multiplier):  # copy multiplier times in y
+        for j in range(multiplier):  # copy multiplier times in x
             for row_id, row in enumerate(f_maze):  # rows in maze
                 for col_id, val in enumerate(row):  # cols in maze
                     large_maze[i * len(f_maze) + row_id][j * len(f_maze[0]) + col_id] = calc_maze_el(val, i + j)
@@ -78,13 +78,14 @@ def solve_maze(display):
 
 
 if __name__ == "__main__":
+    mazeMultiplier = 5
     pygame.init()
-    ui_screen = pygame.display.set_mode((500, 500))
+    ui_screen = pygame.display.set_mode((100 * mazeMultiplier, 100 * mazeMultiplier))
 
     t1 = t.default_timer()
     maze = readfile()  # read input.txt
     solve_maze(False)  # solve first part
-    maze = generate_large_maze(maze)  # prepare maze for second part
+    maze = generate_large_maze(maze, mazeMultiplier)  # prepare maze for second part
     solve_maze(True)  # solve second part
 
     pygame.quit()
